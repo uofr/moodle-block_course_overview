@@ -23,6 +23,11 @@
  */
 defined('MOODLE_INTERNAL') || die;
 
+# cunnintr - Hack by enright - Added to make sure the the forum functions are available
+require_once("$CFG->dirroot/mod/forum/lib.php");
+require_once("$CFG->dirroot/local/ur_functions.php");
+# end Hack
+
 /**
  * Course_overview block rendrer
  *
@@ -39,6 +44,8 @@ class block_course_overview_renderer extends plugin_renderer_base {
      * @return string html to be displayed in course_overview block
      */
     public function course_overview($courses, $overviews) {
+        global $DB,$CFG,$USER;
+        
         $html = '';
         $config = get_config('block_course_overview');
         if ($config->showcategories != BLOCKS_COURSE_OVERVIEW_SHOWCATEGORIES_NONE) {
@@ -86,7 +93,33 @@ class block_course_overview_renderer extends plugin_renderer_base {
             if ($ismovingcourse && ($course->id == $movingcourseid)) {
                 continue;
             }
-            $html .= $this->output->box_start('coursebox', "course-{$course->id}");
+            
+            // UR Hack: cunnintr - hack to push ur css classes
+        	// specify colour for course
+        	$urclass = '';
+        	$courserec = $DB->get_record('course',array('id'=>$course->id));
+        	$categoryrec = $DB->get_record('course_categories',array('id'=>$courserec->category));
+            
+            
+        	if (!empty($categoryrec->theme)) {
+        		$categorytheme = explode('_',$categoryrec->theme);
+        		$urclass = ' '.$categorytheme[count($categorytheme)-1];
+        	}
+        	if (!empty($courserec->theme)) {
+        		$coursetheme = explode('_',$courserec->theme);
+        		if (count($coursetheme)>0 && $coursetheme[0]=='urcourses') $urclass = ' '.$coursetheme[count($coursetheme)-1];
+        	}
+            
+            /*
+            $html .= '<pre>'.print_r($courserec,1).'</pre>';
+            $html .= '<pre>'.print_r($categoryrec,1).'</pre>';
+            $html .= '<pre>'.print_r($urclass,1).'</pre>';
+            */
+            
+            $html .= $this->output->box_start('coursebox'.$urclass, "course-{$course->id}");
+            //$html .= $this->output->box_start('coursebox', "course-{$course->id}");
+            // end hack
+            
             $html .= html_writer::start_tag('div', array('class' => 'course_title'));
             // If user is editing, then add move icons.
             if ($userediting && !$ismovingcourse) {
@@ -112,20 +145,90 @@ class block_course_overview_renderer extends plugin_renderer_base {
                     new moodle_url('/auth/mnet/jump.php', array('hostid' => $course->hostid, 'wantsurl' => '/course/view.php?id='.$course->remoteid)),
                     format_string($course->shortname, true), $attributes) . ' (' . format_string($course->hostname) . ')', 2, 'title');
             }
+            
+			// hide old course alerts now
+            //$html .= get_course_alerts($course);
+            
             $html .= $this->output->container('', 'flush');
             $html .= html_writer::end_tag('div');
+            
+            
+            // UR HACK: Change display of course teachers
+            $ci_context = context_course::instance($course->id);
 
+            $ci_content = '';
+
+            if (!empty($CFG->coursecontact)) {
+                $namesarray = array();
+                $coursecontactroles = explode(',', $CFG->coursecontact);
+                foreach ($coursecontactroles as $roleid) {
+                    if ($users = get_role_users($roleid, $ci_context, true)) {
+                        foreach ($users as $teacher) {
+                            $role = new stdClass();
+                            $role->id = $teacher->roleid;
+                            $role->name = $teacher->rolename;
+                            $role->shortname = $teacher->roleshortname;
+                            $role->coursealias = $teacher->rolecoursealias;
+                            $fullname = fullname($teacher, has_capability('moodle/site:viewfullnames', $ci_context));
+                            $namesarray[role_get_name($role, $ci_context)][] = '<a href="'.$CFG->wwwroot.'/user/view.php?id='.
+                                $teacher->id.'&amp;course='.SITEID.'">'.$fullname.'</a>';
+                        }
+                    }
+                }
+
+                if (!empty($namesarray)) {
+                    foreach($namesarray as $role=>$members) {
+                        $ci_content .= '<div class="teachers">';
+                        //$ci_content .= "<ul class=\"teachers\">\n<li>";
+                        //$isplural = count($members) > 1 ? 's' : '';
+                        //$ci_content .= $role.$isplural.': '.implode(', ', $members);
+                        $ci_content .= implode(', ', $members);
+                        //$ci_content .= "</li></ul>";
+                        $ci_content .= '</div>';
+                    }
+                }
+            }
+
+            $ci_content .= $this->output->box_start('generalbox');
+
+            $ci_summary = file_rewrite_pluginfile_urls($courserec->summary, 'pluginfile.php', $ci_context->id, 'course', 'summary', null);
+            $ci_content .= format_text($ci_summary, $courserec->summaryformat, array('overflowdiv'=>true), $course->id);
+
+            $ci_content .= $this->output->box_end();
+
+            $html .= $ci_content;
+            // end hack
+            
+            
             if (!empty($config->showchildren) && ($course->id > 0)) {
                 // List children here.
                 if ($children = block_course_overview_get_child_shortnames($course->id)) {
                     $html .= html_writer::tag('span', $children, array('class' => 'coursechildren'));
                 }
             }
-
+            
+            $html .= $this->page->user_is_editing() ? '<div class="myedit_offset" style="padding-left: 1.5em">' : '';
+            
             // If user is moving courses, then down't show overview.
             if (isset($overviews[$course->id]) && !$ismovingcourse) {
+                // UR HACK: provide some context to display
+                $isplural = count($overviews[$course->id]) > 1 ? 's' : '';
+				
+				// will use if we can fins way to expand all notifications
+				$isexpanded = 0;
+                $html .= '<div id="mya_course-'.$course->id.'" class="myactivity_notice_head" style="">You have '.($isplural?'new':'a new').' notification'.$isplural.' for the following: (<a href="#" class="mya_trigger" onclick="M.block_course_overview.expandregions(this.parentNode.parentNode.getAttribute(\'id\')); return false;">'.($isexpanded?'Hide':'Show').' Details</a>)</div>';
+				
+				//$html .= '<div class="myactivity_notice_head" style="">You have '.($isplural?'new':'a new').' notification'.$isplural.' for the following:</div>';
+				
+				//$html .= '<pre>'.print_r($overviews[$course->id],1).'</pre>';
+				                
                 $html .= $this->activity_display($course->id, $overviews[$course->id]);
+    
+            } else {
+                $html .= '<div class="myactivity_notice_head" style="">You have no notifications at this time.</div>'; 
+                
             }
+            $html .= $this->page->user_is_editing() ? '</div>' : ''; 
 
             if ($config->showcategories != BLOCKS_COURSE_OVERVIEW_SHOWCATEGORIES_NONE) {
                 // List category parent or categories path here.
@@ -173,20 +276,32 @@ class block_course_overview_renderer extends plugin_renderer_base {
     protected function activity_display($cid, $overview) {
         $output = html_writer::start_tag('div', array('class' => 'activity_info'));
         foreach (array_keys($overview) as $module) {
+			// start .activity_overview
             $output .= html_writer::start_tag('div', array('class' => 'activity_overview'));
             $url = new moodle_url("/mod/$module/index.php", array('id' => $cid));
             $modulename = get_string('modulename', $module);
-            $icontext = html_writer::link($url, $this->output->image_icon('icon', $modulename, 'mod_'.$module, array('class'=>'iconlarge')));
+            
+            // UR HACK: no need to link icon, it's wrapped in a link
+            //$icontext = html_writer::link($url, $this->output->pix_icon('icon', $modulename, 'mod_'.$module, array('class'=>'iconlarge')));
+            $icontext = $this->output->image_icon('icon', $modulename, 'mod_'.$module, array('class'=>'iconlarge'));
+
             if (get_string_manager()->string_exists("activityoverview", $module)) {
                 $icontext .= get_string("activityoverview", $module);
             } else {
                 $icontext .= get_string("activityoverview", 'block_course_overview', $modulename);
             }
 
-            // Add collapsible region with overview text in it.
-            $output .= $this->collapsible_region($overview[$module], '', 'region_'.$cid.'_'.$module, $icontext, '', true);
-
-            $output .= html_writer::end_tag('div');
+			if ($modulename == 'Course Email')  {
+				$output .= html_writer::start_tag('div', array('class' => 'email_overview'));
+				$output .= $overview[$module];
+				$output .= html_writer::end_tag('div');
+			} else {
+				// Add collapsible region with overview text in it.
+				$output .= $this->collapsible_region($overview[$module], '', 'region_'.$cid.'_'.$module, $icontext, '', true);
+			}
+			
+			// close .activity_overview
+			$output .= html_writer::end_tag('div');
         }
         $output .= html_writer::end_tag('div');
         return $output;
@@ -209,7 +324,27 @@ class block_course_overview_renderer extends plugin_renderer_base {
         $select = new single_select($url, 'mynumber', $options, block_course_overview_get_max_user_courses(), array());
         $select->set_label(get_string('numtodisplay', 'block_course_overview'));
         $output .= $this->output->render($select);
+        
+        
+        // ur sort by date hack
+        //$sortbydate_url = new moodle_url('/blocks/course_overview/sortbydate.php',
+        //    array('sesskey' => sesskey()));
+        //$sortbydate_url = html_writer::link($sortbydate_url, get_string('sortby'));
 
+        //$output .= $sortbydate_url;
+
+        $options = array('custom'=>'Custom','startdate'=>'Start Date','timecreated'=>'Creation Date','fullname'=>'Alphabetical');
+
+
+        $url = new moodle_url('/blocks/course_overview/sortby.php');
+        $select = new single_select($url, 'sortby', $options, block_course_overview_get_sortby(), array());
+        $select->set_label(get_string('sortby').':');
+        $select->class = 'singleselect overview_sortby';
+        $output .= $this->output->render($select);
+
+        // end hack
+        
+        
         $output .= $this->output->box_end();
         return $output;
     }
@@ -237,7 +372,12 @@ class block_course_overview_renderer extends plugin_renderer_base {
                     get_string('showallcourses'));
             $output .= get_string('hiddencoursecountwithshowall'.$plural, 'block_course_overview', $a);
         }
-
+        
+        // UR HACK: output link to display all courses
+        $url = new moodle_url('/my/index.php');
+        $output .= '. '.html_writer::tag('a', get_string('alwaysshowall', 'block_course_overview'), array('href' => $url.'?mynumber=0'));
+        // end hack
+                
         $output .= $this->output->box_end();
         return $output;
     }

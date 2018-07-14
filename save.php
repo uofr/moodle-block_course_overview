@@ -31,4 +31,4 @@ require_login();
 
 $sortorder = required_param_array('sortorder', PARAM_INT);
 
-block_course_overview_update_myorder($sortorder);
+block_course_overview_update_myorder($sortorder,true);

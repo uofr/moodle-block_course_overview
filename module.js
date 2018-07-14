@@ -228,3 +228,24 @@ M.block_course_overview.CollapsibleRegion.prototype.div = null;
  */
 M.block_course_overview.CollapsibleRegion.prototype.icon = null;
 
+
+M.block_course_overview.expandregions = function(id) {
+	//console.log('doing expandregions: '+id);
+	this.div = Y.one('#'+id);
+	this.div.all('.activity_overview').each(function(node) {
+            //console.log(node);
+			this.subdiv = node.one('.collapsibleregioncaption');
+			if (this.subdiv) {
+				//console.log('sub:'+this.subdiv.getAttribute('id'));
+				//subnode = Y.one('#'+this.subdiv.getAttribute('id'));
+				//subnode.simulate("click");
+				//using jquery because simpler
+				$('#'+this.subdiv.getAttribute('id')).click();
+			}
+        });
+		this.toggler = Y.one('#mya_'+id);
+		this.trigger = this.toggler.one('.mya_trigger');
+		//console.log(this.trigger.get('text'));
+		this.trigger_value = (this.trigger.get('text')=='Show Details'?'Hide Details':'Show Details')
+		this.trigger.set('text',this.trigger_value);
+}

@@ -48,6 +48,32 @@ function block_course_overview_get_overviews($courses) {
         } else {
             $batches = array($courses);
         }
+		
+		
+		// U of R hack: change order of notifications;
+		
+		$modules_sort = array();
+		
+		$module_order = explode(',','mod_mail,mod_forum,mod_checklist,mod_assign,mod_turnitintooltwo,mod_quiz,mod_oublog,mod_choice');
+		
+		foreach ($module_order as $key) {
+			if (array_key_exists($key,$modules)) {
+				$modules_sort[$key] = $modules[$key];
+				unset($modules[$key]);
+			}
+		}
+		
+		foreach ($modules as $key => $module) {
+			$modules_sort[$key] = $module;
+			unset($modules[$key]);
+		}
+		
+		$modules = $modules_sort;
+		
+		
+		//die('<pre>'.print_r($modules,1).'</pre>');
+		
+		
         foreach ($batches as $courses) {
             foreach ($modules as $fname) {
                 $fname($courses, $htmlarray);
@@ -72,13 +98,14 @@ function block_course_overview_update_mynumber($number) {
  *
  * @param array $sortorder list of course ids
  */
-function block_course_overview_update_myorder($sortorder) {
+function block_course_overview_update_myorder($sortorder, $iscustom = false) {
     $value = implode(',', $sortorder);
     if (core_text::strlen($value) > 1333) {
         // The value won't fit into the user preference. Remove courses in the end of the list (mostly likely user won't even notice).
         $value = preg_replace('/,[\d]*$/', '', core_text::substr($value, 0, 1334));
     }
     set_user_preference('course_overview_course_sortorder', $value);
+    if ($iscustom) set_user_preference('course_overview_course_sortorder_custom', get_user_preferences('course_overview_course_sortorder'));
 }
 
 /**
@@ -98,6 +125,16 @@ function block_course_overview_get_myorder() {
         unset_user_preference('course_overview_course_order');
     }
     return $order;
+}
+
+/**
+ * Gets user course sortby preference in course_overview block
+ *
+ * @return string sortby value
+ */
+function block_course_overview_get_sortby() {
+    $value = get_user_preferences('course_overview_course_sortby');
+    return $value;
 }
 
 /**

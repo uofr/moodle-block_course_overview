@@ -56,5 +56,5 @@ $remaningcourses = array_slice($sortedcourses, $moveto);
 foreach ($remaningcourses as $courseid) {
     $neworder[] = $courseid;
 }
-block_course_overview_update_myorder(array_values($neworder));
+block_course_overview_update_myorder(array_values($neworder),true);
 redirect(new moodle_url('/my/index.php'));

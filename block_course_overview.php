@@ -82,10 +82,12 @@ class block_course_overview extends block_base {
         }
 
         // Number of sites to display.
-        if ($this->page->user_is_editing() && empty($config->forcedefaultmaxcourses)) {
+        // UR Hack: let user always decide?
+        //if ($this->page->user_is_editing() && empty($config->forcedefaultmaxcourses)) {
             $this->content->text .= $renderer->editing_bar_head($totalcourses);
-        }
-
+        //}
+        // end hack
+        
         if (empty($sortedcourses)) {
             $this->content->text .= get_string('nocourses','my');
         } else {
