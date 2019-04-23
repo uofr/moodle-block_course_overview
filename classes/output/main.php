@@ -102,12 +102,12 @@ class main implements renderable, templatable {
                     $overview->coursename = $course->fullname;
                     $overview->visible = $course->visible;
                     $overview->activity = $activity;
-                    $overview->text = str_replace('p-y-1', '', $overviewtext);
-                    $description = get_string('activityoverview', 'block_course_overview',
+                    $overview->text = str_replace(array('p-y-1', 'py-3', get_string('pluginname', 'mod_' . $activity) . ':'), '', $overviewtext);
+                    $overview->description = get_string('activityoverview', 'block_course_overview',
                         get_string('pluginname', 'mod_' . $activity));
                     $overviewid = $activity . '_' . $course->id;
                     $overview->overviewid = $overviewid;
-                    $overview->icon = $output->pix_icon('icon', $description, 'mod_' . $activity);
+                    $overview->icon = $output->pix_icon('icon', $overview->description, 'mod_' . $activity);
                     $overviews[] = $overview;
                 }
                 $course->overviews = $overviews;
@@ -287,6 +287,8 @@ class main implements renderable, templatable {
             'viewingfavourites' => $this->selectedtab == 'favourites',
             'select' => $this->reorder_select($output),
             'selectmaxcourses' => $this->user_select_maxcourses($output),
+            'showdetail' => get_string('showdetail', 'block_course_overview'),
+            'hidedetail' => get_string('hidedetail', 'block_course_overview'),
         ];
     }
 

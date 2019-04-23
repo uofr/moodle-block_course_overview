@@ -24,30 +24,43 @@
 }}
 <div class="course-list container-fluid">
     {{# data }}
-        <div id="course-{{ id }}" class="row courseovbox lead">
-            <div class="col-sm-1 span1">
-                {{# isediting }}
-                    <i class="icon fa fa-fw fa-arrows cursor" title="{{# str }}movecourse, block_course_overview, {{ fullname }}{{/ str }}"></i>
-                {{/ isediting }}
-                {{^ isediting }}
-                    <a href="{{ favouritelink }}" class="favourite_icon text-primary" alt="{{ favouritealt }}">
-                        <i class="icon fa fa-fw {{ favouriteicon }} " title="{{ favouritealt }}"></i>
-                    </a>
-                {{/ isediting }}
-            </div>
-            <div class="col-sm-8 span8">
-                <strong><a {{^ visible }}class="dimmed"{{/ visible }} href="{{ link }}">{{ fullname }}</a></strong><br />
-                <small>{{ categories }}</small>
-            </div>
-            {{# hasoverviews }}
-                <div class="col-sm-2 span2 pull-right">
-                    {{# overviews }}
-                         <span class="overview-icon" data-id="#{{ overviewid }}">
-                             {{{ icon }}}
-                         </span>
-                    {{/ overviews }}
+        <div class="row-fluid">
+            <div id="course-{{ id }}" class="courseovbox col-12 span12">
+                <div class="d-flex flex-row">
+                    {{# isediting }}
+                        <i class="icon fa fa-fw fa-arrows cursor" title="{{# str }}movecourse, block_course_overview, {{ fullname }}{{/ str }}"></i>
+                    {{/ isediting }}
+                    {{^ isediting }}
+                        <a href="{{ favouritelink }}" class="favourite_icon text-primary" alt="{{ favouritealt }}">
+                            <i class="icon fa fa-fw {{ favouriteicon }} " title="{{ favouritealt }}"></i>
+                        </a>
+                    {{/ isediting }}
+                    <h5 class="overview-title"><a {{^ visible }}class="dimmed"{{/ visible }} href="{{ link }}">{{ fullname }}</a></h5><br />
+                    <small>{{ categories }}</small>
                 </div>
-            {{/ hasoverviews }}
+                <div>
+                    {{^ hasoverviews }}
+                        <span>{{# str }} nonotif, block_course_overview {{/ str }}</span>
+                    {{/ hasoverviews }}
+                    {{# hasoverviews }}
+                        <div class="mb-2">
+                            <span>
+                                {{# str }} newnotif, block_course_overview {{/ str }}
+                                (<a href="#" data-toggle="collapse" data-target=".multicollapse-{{id}}" class="course-detail-collapse" aria-expanded="false">{{# str }} showdetail, block_course_overview {{/ str }}</a>)
+                            </span>
+                        </div>
+                        {{# overviews }}
+                            <span class="overview-icon" data-id="#{{ overviewid }}">
+                                {{{ icon }}}
+                                <span class="activity-description" style="display: none;">{{ description }}</span>
+                            </span>
+                            <div class="collapse multicollapse-{{id}}">
+                                {{{ text }}}
+                            </div>
+                        {{/ overviews }}
+                    {{/ hasoverviews }}
+                </div>
+            </div>
         </div>
      {{/ data }}
      {{^ data }}

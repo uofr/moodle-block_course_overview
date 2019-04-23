@@ -71,25 +71,6 @@
         {{/ tabs }}
     </div>
 
-    {{^ isediting }}
-    <div class="dialogue_container" style="display: none">
-        {{# tabs }}
-            {{# data }}
-                {{# hasoverviews }}
-                    {{# overviews }}
-                        <div class="dialogue" id="{{ overviewid }}">
-                            <h3>{{ coursename }}</h3>
-                            <div class="activity_overviews">
-                                {{{ text }}}
-                            </div>
-                        </div>
-                    {{/ overviews }}
-                {{/ hasoverviews }}
-            {{/ data }}
-        {{/ tabs }}
-    </div>
-    {{/ isediting }}
-
     <div class="overview-help">
         {{{ help }}}
     </div>
@@ -102,11 +83,22 @@
         });
     {{/ js }}
 {{/ isediting }}
-{{^ isediting }}
-    {{# js }}
-        require(['jquery', 'block_course_overview/popup'], function($, Popup) {
-            Popup.init({{ viewingfavourites }});
-        });
-    {{/ js }}
-{{/ isediting }}
 
+{{# js }}
+    require(['jquery'], function($) {
+        $('.course-detail-collapse').click(function() {
+            if ($(this).attr('aria-expanded') === 'true') {
+                $(this).text('{{{showdetail}}}');
+            }
+            else {
+                $(this).text('{{{hidedetail}}}');
+            }
+        });
+        $('.collapse').on('show.bs.collapse', function() {
+            $(this).parent().parent().find('.activity-description').show();
+        });
+        $('.collapse').on('hidden.bs.collapse', function() {
+           $(this).parent().parent().find('.activity-description').hide();
+        });
+    });
+{{/ js }}

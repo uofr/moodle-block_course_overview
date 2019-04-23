@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['activityoverview'] = 'You have {$a}s that need attention';
+$string['activityoverview'] = 'New {$a}s';
 $string['addfavourite'] = 'Add favourite';
 $string['alwaysshowall'] = 'Always show all';
 $string['collapseall'] = 'Collapse all course lists';
@@ -86,3 +86,7 @@ $string['view_edit_profile'] = '(View and edit your profile.)';
 $string['welcome'] = 'Welcome {$a}';
 $string['youhavemessages'] = 'You have {$a} unread ';
 $string['youhavenomessages'] = 'You have no unread ';
+$string['showdetail'] = 'Show';
+$string['hidedetail'] = 'Hide';
+$string['newnotif'] = 'You have new notifications.';
+$string['nonotif'] = 'You have no notifications.';

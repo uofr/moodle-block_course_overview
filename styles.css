@@ -1,7 +1,7 @@
 .block-course-overview .courseovbox {
     border-bottom: 1px solid #d3d8dc;
     padding-top: 12px;
-    padding-bottom: 4px;
+    padding-bottom: 12px;
 }
 
 .block-course-overview .course-list {
@@ -9,10 +9,18 @@
 }
 
 .overview-icon .icon {
-    height: 25px;
-    width: 25px;
+    height: 20px;
+    width: 20px;
 }
 
+.overview-title {
+    font-weight: 501;
+    margin: 0;
+}
+
+.overview {
+    margin: 1em 0 1em 0;
+}
 
 .course-overview-dialog {
     display: none;
@@ -50,10 +58,6 @@ a.favourite_icon:hover {
 
 .block-course-overview .overview-help i {
     font-size: 1.5em;
-}
-
-div.courseovbox {
-    margin-left: -15px !important;
 }
 
 .course-overview-dialog .ui-dialog-titlebar button{
