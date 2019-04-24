@@ -1,0 +1,14 @@
+<div class="morecoursesdiv">
+    {{{ morecourses.text }}}
+    {{# morecourses.showprevpage }}<a href="{{{ morecourses.linkprev }}}" class="morecourseslink">{{{ morecourses.prevpage }}}</a>{{/ morecourses.showprevpage }}
+    {{# morecourses.pages }}
+        {{^ current }}
+            <a href="{{{ pagelink }}}">
+        {{/ current }}
+        <span class="pageslink {{# current }}current{{/ current}}">{{{ pagetext }}}</span>
+        {{^ current }}
+            </a>
+        {{/ current }}
+    {{/ morecourses.pages }}
+    {{# morecourses.shownextpage }}<a href="{{{ morecourses.linknext }}}" class="morecourseslink">{{{ morecourses.nextpage }}}</a>{{/ morecourses.shownextpage }}
+</div>

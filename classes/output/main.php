@@ -89,10 +89,12 @@ class main implements renderable, templatable {
                 $course->favouritelink = new \moodle_url('/my', array('unfavourite' => $course->id));
                 $course->favouriteicon = 'fa-star';
                 $course->favouritealt = get_string('unfavourite', 'block_course_overview');
+                $course->isfavourite = 'isfav';
             } else {
                 $course->favouritelink = new \moodle_url('/my', array('favourite' => $course->id));
                 $course->favouriteicon = 'fa-star-o';
                 $course->favouritealt = get_string('makefavourite', 'block_course_overview');
+                $course->isfavourite = 'notfav';
             }
             if (!empty($tab->overviews[$course->id])) {
                 $course->hasoverviews = true;
@@ -103,8 +105,8 @@ class main implements renderable, templatable {
                     $overview->visible = $course->visible;
                     $overview->activity = $activity;
                     $overview->text = str_replace(array('p-y-1', 'py-3', get_string('pluginname', 'mod_' . $activity) . ':'), '', $overviewtext);
-                    $overview->description = get_string('activityoverview', 'block_course_overview',
-                        get_string('pluginname', 'mod_' . $activity));
+                    $overview->description = get_string('pluginname', 'mod_' . $activity);
+                    if ($activity != 'mail') $overview->description .= 's';
                     $overviewid = $activity . '_' . $course->id;
                     $overview->overviewid = $overviewid;
                     $overview->icon = $output->pix_icon('icon', $overview->description, 'mod_' . $activity);
