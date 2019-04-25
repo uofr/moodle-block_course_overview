@@ -125,7 +125,7 @@ class main implements renderable, templatable {
     /**
      * Get (if required) category string for course
      * @param int $id course's category id
-     * @return string category path
+     * @return array category path
      */
     private function categories($id) {
         $categories = array();

@@ -248,6 +248,8 @@ function block_course_overview_get_sorted_courses($favourites, $keepfavourites =
         }
 
         foreach ($courses as $c) {
+            $c->contacts = block_course_overview_get_course_contacts($c);
+
             if (isset($USER->lastcourseaccess[$c->id])) {
                 $courses[$c->id]->lastaccess = $USER->lastcourseaccess[$c->id];
             } else {
@@ -376,4 +378,30 @@ function block_course_overview_remove_favourite($favourite) {
         $order[] = $favourite;
     }
     block_course_overview_update_myorder($order);
+}
+
+/**
+ * Gets a list of course contacts (users with specified roles, typically instructors) to display with the course title.
+ * Course Contacts can be defined in Site Administration >> Apearance >> Courses
+ * @param stdClass $course - course object
+ * @return array $contacts - a list of course contacts, including profile pictures and links to profile page.
+ */
+function block_course_overview_get_course_contacts($course) {
+    global $CFG, $OUTPUT;
+    $course_context = context_course::instance($course->id);
+    $contact_roles = '';
+    $rusers = array();
+    $contacts = array();
+
+    if (!empty($CFG->coursecontact)) {
+        $contact_roles = explode(',', $CFG->coursecontact);
+        $rusers = get_role_users($contact_roles, $course_context, true, '*');
+        foreach($rusers as $user) {
+            $contact = new stdClass();
+            $contact->profilelink = $OUTPUT->user_picture($user, array('courseid' => $course->id, 'size' => 25, 'includefullname' => true));
+            $contacts[] = $contact;
+        }
+    }
+
+    return $contacts;
 }

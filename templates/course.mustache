@@ -25,7 +25,7 @@
 <div id="course-{{ id }}" class="courseovbox row-fluid">
     <div class="col-12 span12">
 
-        <div class="d-flex flex-row mb-2">
+        <div class="d-flex flex-row">
             {{# isediting }}
                 <i class="icon fa fa-fw fa-arrows cursor" title="{{# str }}movecourse, block_course_overview, {{ fullname }}{{/ str }}"></i>
             {{/ isediting }}
@@ -36,6 +36,11 @@
             {{/ isediting }}
             <h5 class="overview-title"><a {{^ visible }}class="dimmed"{{/ visible }} href="{{ link }}">{{ fullname }}</a></h5><br />
             <small>{{ categories }}</small>
+        </div>
+        <div class="mb-2">
+            {{# contacts }}
+                {{{ profilelink }}}
+            {{/ contacts }}
         </div>
         
         <div>
