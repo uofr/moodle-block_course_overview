@@ -18,12 +18,19 @@ class block_course_overview_external extends external_api {
         self::validate_context(context_course::instance($params['courseid']));
         block_course_overview_add_favourite($params['courseid']);
 
-        return array('message' => 'good');
+        $config = get_config('block_course_overview');
+        return array(
+            'courseid' => $params['courseid'],
+            'keepfavourites' => $config->keepfavourites,
+            'favouritealt' => get_string('unfavourite', 'block_course_overview'),
+        );
     }
 
     public static function add_favourite_returns() {
         return new external_single_structure(array (
-            'message' => new external_value(PARAM_TEXT)
+            'courseid' => new external_value(PARAM_INT),
+            'keepfavourites' => new external_value(PARAM_BOOL),
+            'favouritealt' => new external_value(PARAM_TEXT)
         ));
     }
 
@@ -41,12 +48,19 @@ class block_course_overview_external extends external_api {
         self::validate_context(context_course::instance($params['courseid']));
         block_course_overview_remove_favourite($params['courseid']);
 
-        return array('message' => 'good');
+        $config = get_config('block_course_overview');
+        return array(
+            'courseid' => $params['courseid'],
+            'keepfavourites' => $config->keepfavourites,
+            'favouritealt' => get_string('unfavourite', 'block_course_overview')
+        );
     }
 
     public static function remove_favourite_returns() {
         return new external_single_structure(array (
-            'message' => new external_value(PARAM_TEXT)
+            'courseid' => new external_value(PARAM_INT),
+            'keepfavourites' => new external_value(PARAM_BOOL),
+            'favouritealt' => new external_value(PARAM_TEXT)
         ));
     }
 
