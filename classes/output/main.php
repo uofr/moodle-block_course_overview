@@ -160,7 +160,6 @@ class main implements renderable, templatable {
         $options = [
             BLOCKS_COURSE_OVERVIEW_REORDER_NONE => get_string('reordernone', 'block_course_overview'),
             BLOCKS_COURSE_OVERVIEW_REORDER_FULLNAME => get_string('reorderfullname', 'block_course_overview'),
-            BLOCKS_COURSE_OVERVIEW_REORDER_SHORTNAME => get_string('reordershortname', 'block_course_overview'),
             BLOCKS_COURSE_OVERVIEW_REORDER_ID => get_string('reorderid', 'block_course_overview'),
         ];
 
@@ -184,13 +183,18 @@ class main implements renderable, templatable {
     private function user_select_maxcourses(renderer_base $output) {
         // Site setting - max possible courses.
         $setmaxcoursesmax = get_config('block_course_overview')->setmaxcoursesmax;
+        // Site setting - default num courses
+        $defaultcoursenum = get_config('block_course_overview')->setmaxcourses;
         // User total enrolled courses.
         $usercount = count(enrol_get_my_courses());
         // Number of courses to display for user to choose from.
         $max = $usercount > $setmaxcoursesmax ? $setmaxcoursesmax : $usercount;
-
-        $options = range(0, $max);
-        $options[0] = "0".get_string('userchoosezero', 'block_course_overview');
+        
+        $options = array();
+        if ($defaultcoursenum < $max) {
+            $options = range($defaultcoursenum, $max);
+        }
+        $options[0] = get_string('userchoosezero', 'block_course_overview', $defaultcoursenum);
 
         $select = $output->single_select(
             new \moodle_url('/my', array('sesskey' => sesskey())),

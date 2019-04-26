@@ -64,8 +64,6 @@ class block_course_overview extends block_base {
         $this->content->text = '';
         $this->content->footer = '';
 
-        $content = array();
-
         $isediting = $this->page->user_is_editing();
 
         $updatemynumber = optional_param('mynumber', -1, PARAM_INT);
