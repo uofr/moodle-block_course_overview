@@ -30,8 +30,10 @@ define('BLOCKS_COURSE_OVERVIEW_SHOWCATEGORIES_FULL_PATH', '2');
 
 define('BLOCKS_COURSE_OVERVIEW_REORDER_NONE', '0');
 define('BLOCKS_COURSE_OVERVIEW_REORDER_FULLNAME', '1');
-define('BLOCKS_COURSE_OVERVIEW_REORDER_SHORTNAME', '2');
-define('BLOCKS_COURSE_OVERVIEW_REORDER_ID', '3');
+define('BLOCKS_COURSE_OVERVIEW_REORDER_STARTDATE', '2');
+define('BLOCKS_COURSE_OVERVIEW_REORDER_ENDDATE', '3');
+define('BLOCKS_COURSE_OVERVIEW_REORDER_RECENT', '4');
+
 
 define('BLOCKS_COURSE_OVERVIEW_DEFAULT_FAVOURITES', '1');
 define('BLOCKS_COURSE_OVERVIEW_DEFAULT_COURSES', '2');
@@ -233,14 +235,19 @@ function block_course_overview_get_sorted_courses($favourites, $keepfavourites =
         // Get courses in order.
         if ($sortorder == BLOCKS_COURSE_OVERVIEW_REORDER_FULLNAME) {
             $sort = 'fullname ASC';
-        } else if ($sortorder == BLOCKS_COURSE_OVERVIEW_REORDER_SHORTNAME) {
-            $sort = 'shortname ASC';
-        } else if ($sortorder == BLOCKS_COURSE_OVERVIEW_REORDER_ID) {
-            $sort = 'id ASC';
+        } else if ($sortorder == BLOCKS_COURSE_OVERVIEW_REORDER_STARTDATE) {
+            $sort = 'startdate ASC';
+        } else if ($sortorder == BLOCKS_COURSE_OVERVIEW_REORDER_ENDDATE) {
+            $sort = 'enddate ASC';
         } else {
             $sort = 'visible DESC,sortorder ASC';
         }
-        $courses = enrol_get_my_courses(null, $sort);
+        if ($sortorder != BLOCKS_COURSE_OVERVIEW_REORDER_RECENT) {
+            $courses = enrol_get_my_courses(null, $sort);
+        }
+        else {
+            $courses = course_get_recent_courses($USER->id);
+        }
         $site = get_site();
 
         if (array_key_exists($site->id, $courses)) {

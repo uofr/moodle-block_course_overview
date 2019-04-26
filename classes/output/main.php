@@ -160,7 +160,9 @@ class main implements renderable, templatable {
         $options = [
             BLOCKS_COURSE_OVERVIEW_REORDER_NONE => get_string('reordernone', 'block_course_overview'),
             BLOCKS_COURSE_OVERVIEW_REORDER_FULLNAME => get_string('reorderfullname', 'block_course_overview'),
-            BLOCKS_COURSE_OVERVIEW_REORDER_ID => get_string('reorderid', 'block_course_overview'),
+            BLOCKS_COURSE_OVERVIEW_REORDER_STARTDATE => get_string('reorderstartdate', 'block_course_overview'),
+            BLOCKS_COURSE_OVERVIEW_REORDER_ENDDATE => get_string('reorderenddate', 'block_course_overview'),
+            BLOCKS_COURSE_OVERVIEW_REORDER_RECENT => get_string('reorderrecent', 'block_course_overview'),
         ];
 
         // Courses reorder select.
