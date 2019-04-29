@@ -36,8 +36,10 @@ $string['defaulttabdesc'] = 'Which tab will be displayed by default when the Das
 $string['expandall'] = 'Expand all course lists';
 $string['favourites'] = 'Favourites';
 $string['fullpath'] = 'All categories and subcategories';
-$string['help'] = 'Help';
-$string['help_help'] = '\'Customise this page\', then drag-and-drop to reorder courses. Click activity icons for overview';
+$string['help'] = 'Course Overview';
+$string['help_help'] = 'Click \'Customise this page\', to customize your Course Overview. 
+                        You can choose how many courses you want to display, drag and drop to re-order your courses, or sort your courses.
+                        If you have activity notifications, click Show to reveal them.';
 $string['keepfavourites'] = 'Keep favourites in course list';
 $string['keepfavouritesdesc'] = 'Show courses in main course tab even if they are also in the favourites tab';
 $string['makefavourite'] = 'Make favourite';

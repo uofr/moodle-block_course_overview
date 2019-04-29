@@ -49,20 +49,22 @@
             {{/ hasoverviews }}
             {{# hasoverviews }}
                 <div class="mb-2">
-                    <span>
-                        {{# str }} newnotif, block_course_overview {{/ str }}
-                        (<a href="#" data-toggle="collapse" data-target=".multicollapse-{{id}}" class="course-detail-collapse" aria-expanded="false">{{# str }} showdetail, block_course_overview {{/ str }}</a>)
-                    </span>
+                    <span>{{# str }} newnotif, block_course_overview {{/ str }}</span>
+                    (<a href="#" class="overview-toggle">{{# str }} showdetail, block_course_overview {{/ str }}</a>)
                 </div>
-                {{# overviews }}
-                    <span class="overview-icon" data-id="#{{ overviewid }}">
-                        {{{ icon }}}
-                        <span class="activity-description" style="display: none;">{{ description }}</span>
-                    </span>
-                    <div class="collapse multicollapse-{{id}}">
-                        {{{ text }}}
-                    </div>
-                {{/ overviews }}
+                <div class="activity-overviews overview-hide">
+                    {{# overviews }}
+                        <div class="activity-overview">
+                            <span class="overview-icon" data-id="#{{ overviewid }}">
+                                {{{ icon }}}
+                                <span class="overview-description">{{ description }}</span>
+                            </span>
+                            <div class="overview-text">
+                                {{{ text }}}
+                            </div>
+                        </div>
+                    {{/ overviews }}
+                </div>
             {{/ hasoverviews }}
         </div>
 

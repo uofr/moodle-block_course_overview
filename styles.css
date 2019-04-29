@@ -8,6 +8,18 @@
     padding-top: 4px;
 }
 
+.overview-hide {
+    display: flex;
+}
+
+.overview-hide .overview-description {
+    display: none;
+}
+
+.overview-hide .overview-text {
+    display: none;
+}
+
 .overview-icon .icon {
     height: 20px;
     width: 20px;
@@ -26,7 +38,7 @@
     font-weight: 501;
 }
 
-.activity-description {
+.overview-description {
     font-weight: 501;
 }
 

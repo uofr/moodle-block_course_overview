@@ -1,20 +1,10 @@
 define(['jquery', 'core/ajax', 'core/notification'], function($, ajax, notification) {
 
+    var SELECTORS = {};
+
     function init() {
-        $('.collapse').on('show.bs.collapse', collapseShow);
-        $('.collapse').on('hidden.bs.collapse', collapseHide);
         $('.notfav').click(favouriteCourse);
         $('.isfav').click(unfavouriteCourse);
-    }
-
-    function collapseShow() {
-        $(this).parent().parent().find('.activity-description').show();
-        $(this).parent().parent().find('.course-detail-collapse').text('Hide');
-    }
-
-    function collapseHide() {
-        $(this).parent().parent().find('.activity-description').hide();
-        $(this).parent().parent().find('.course-detail-collapse').text('Show');
     }
 
     function favouriteCourse(event) {
