@@ -14,6 +14,9 @@
       $(SELECTORS.TAB_CONTENT).on('click', SELECTORS.OVIEW_TOGGLE, {showText : showText, hideText : hideText}, toggleOverview);
       $(SELECTORS.TAB_CONTENT).on('click', SELECTORS.FAV_LINK, favouriteCourse);
       $(SELECTORS.TAB_CONTENT).on('click', SELECTORS.UNFAV_LINK, unfavouriteCourse);
+      $(document).ready(function() {
+         $('.help-icon').popover('hide')
+      });
    }
 
    function toggleOverview(event) {
@@ -46,7 +49,7 @@
    function favouriteCourseDone(response) {
       var course = $(SELECTORS.COURSES_TAB + ' ' + SELECTORS.COURSE + '[data-courseid=' + response.courseid + ']');
       var favLink = course.find(SELECTORS.FAV_LINK);
-      var newIcon = $('<i></i> ').addClass('icon fa fa-fw fa-star').attr('title', response.favouritealt);
+      var newIcon = $('<i></i>').addClass('icon fa fa-fw fa-star').attr('title', response.favouritealt);
 
       favLink.html(newIcon);
       favLink.attr('alt', response.favouritealt);
@@ -74,7 +77,7 @@
    function unfavouriteCourseDone(response) {
       var course = $(SELECTORS.FAVOURITES_TAB + ' ' + SELECTORS.COURSE + '[data-courseid=' + response.courseid + ']');
       var unfavLink = course.find(SELECTORS.UNFAV_LINK);
-      var newIcon = $('<i></i> ').addClass('icon fa fa-fw fa-star-o').attr('title', response.favouritealt);
+      var newIcon = $('<i></i>').addClass('icon fa fa-fw fa-star-o').attr('title', response.favouritealt);
       
       // update course
       unfavLink.html(newIcon);

@@ -123,3 +123,7 @@ a.favourite_icon:hover {
 .no-courses:only-child {
     display: block;
 }
+
+a.favourite_icon {
+    color: #777;
+}
