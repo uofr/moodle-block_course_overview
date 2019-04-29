@@ -115,3 +115,11 @@ a.favourite_icon:hover {
 .block-course-overview .tab-content {
     overflow: hidden;
 }
+
+.no-courses {
+    display: none;
+}
+
+.no-courses:only-child {
+    display: block;
+}

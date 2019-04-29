@@ -22,7 +22,6 @@
     Example context (json):
     {}
 }}
-
 <div id="block-course-overview-{{uniqid}}" class="block-course-overview" data-region="course-overview">
 
     {{# isediting }}
@@ -44,17 +43,15 @@
         </li>
     </ul>
 
-    <div class="tab-content">
+    <div id="course_overview_tabs" class="tab-content">
         {{# tabs }}
             <div class="tab-pane {{ show }}" id="{{ tab }}" role="tabpanel" style="padding: 0;">
                 <div class="course-list container-fluid">
+                    <div class="alert alert-warning mt-3 no-courses">
+                        {{# str }}nocourses, block_course_overview{{/ str }}
+                    </div>
                     {{# data }}
                         {{> block_course_overview/course }}
-                    {{/ data }}
-                    {{^ data }}
-                        <div class="alert alert-warning mt-3">
-                            {{# str }}nocourses, block_course_overview{{/ str }}
-                        </div>
                     {{/ data }}
                 </div>
                 {{# showmorecourses }}
