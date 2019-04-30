@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'jqueryui', 'core/config'], function($, UI, mdlconfig) {
+define(['jquery'], function($) {
 
     return {
         init: function() {

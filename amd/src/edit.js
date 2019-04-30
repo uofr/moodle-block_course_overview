@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'jqueryui'], function($, UI) {
+define(['jquery'], function($) {
 
     return {
         init: function() {
@@ -33,7 +33,7 @@ define(['jquery', 'jqueryui'], function($, UI) {
 
             // Make the course list sort.
             $(".tab-pane .course-list").sortable({
-                update: function(event, ui) {
+                update: function() {
                     var kids = $(".tab-pane.active .course-list").children();
                     var sortorder = [];
                     $.each(kids, function(index, value) {

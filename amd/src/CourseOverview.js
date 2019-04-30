@@ -15,7 +15,7 @@
       $(SELECTORS.TAB_CONTENT).on('click', SELECTORS.FAV_LINK, favouriteCourse);
       $(SELECTORS.TAB_CONTENT).on('click', SELECTORS.UNFAV_LINK, unfavouriteCourse);
       $(document).ready(function() {
-         $('.help-icon').popover('hide')
+         $('.help-icon').popover('hide');
       });
    }
 
@@ -78,19 +78,20 @@
       var course = $(SELECTORS.FAVOURITES_TAB + ' ' + SELECTORS.COURSE + '[data-courseid=' + response.courseid + ']');
       var unfavLink = course.find(SELECTORS.UNFAV_LINK);
       var newIcon = $('<i></i>').addClass('icon fa fa-fw fa-star-o').attr('title', response.favouritealt);
-      
+
       // update course
       unfavLink.html(newIcon);
       unfavLink.attr('alt', response.favouritealt);
       unfavLink.removeClass('isfav').addClass('notfav');
-      
+
       // if block_course_overview | keepfavourites is set to false, clone course from favourites into courses tab
       if (!response.keepfavourites) {
          $(SELECTORS.COURSES_TAB).append(course.clone());
       }
       // otherwise, update course in courses tab
       else {
-         $(SELECTORS.COURSES_TAB + ' ' + SELECTORS.COURSE  + '[data-courseid=' + response.courseid + ']').replaceWith(course.clone());
+         $(SELECTORS.COURSES_TAB + ' ' + SELECTORS.COURSE  +
+         '[data-courseid=' + response.courseid + ']').replaceWith(course.clone());
       }
 
       // in either case, remove course from favourites tab
