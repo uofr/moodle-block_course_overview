@@ -26,16 +26,12 @@
 }
 
 .overview-title {
-    font-weight: 501;
     margin: 0;
 }
 
-.overview {
+.overview-text .overview {
     margin: 0.5em 0 0.5em 0;
-}
-
-.overview .name {
-    font-weight: 501;
+    font-size: small;
 }
 
 .overview-description {
