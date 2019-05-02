@@ -123,3 +123,7 @@ a.favourite_icon:hover {
 a.favourite_icon {
     color: #777;
 }
+
+.courseovbox .contacts {
+    font-size: small;
+}
