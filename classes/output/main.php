@@ -105,7 +105,7 @@ class main implements renderable, templatable {
                     $overview->visible = $course->visible;
                     $overview->activity = $activity;
                     $overview->text = str_replace(array('p-y-1', 'py-3', get_string('pluginname', 'mod_' . $activity) . ':'), '', $overviewtext);
-                    $overview->description = get_string('pluginname', 'mod_' . $activity);
+                    $overview->description = get_string('activityoverview', 'mod_' . $activity);
                     $overviewid = $activity . '_' . $course->id;
                     $overview->overviewid = $overviewid;
                     $overview->icon = $output->pix_icon('icon', $overview->description, 'mod_' . $activity);
